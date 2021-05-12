@@ -24,8 +24,8 @@ DEPS := $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS)))
 $(shell mkdir -p $(dir $(OBJS)) >/dev/null)
 $(shell mkdir -p $(dir $(DEPS)) >/dev/null)
 
-CC 	:= clang++
-LD 	:= clang++
+CC 	:= clang
+LD 	:= clang
 TAR := tar
 
 CFLAGS 	:= -std=c11 -D_GNU_SOURCE
