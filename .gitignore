@@ -1,5 +1,5 @@
 # Prerequisites
-*.d
+.d/**/*.d
 
 # Compiled Object files
 *.slo
@@ -30,4 +30,5 @@
 *.exe
 *.out
 *.app
+
 marx-cli
