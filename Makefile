@@ -15,7 +15,7 @@ OBJDIR := .o
 DEPDIR := .d
 
 # object files, auto generated from source files
-OBJS := $(patsubst %,$(OBJDIR)/%.o,$(basename $(ALL_SRCS)))
+OBJS := $(patsubst %,$(OBJDIR)/%.o,$(basename $(SRCS)))
 # test object files, auto generated from source files
 TEST_OBJS := $(patsubst %,$(OBJDIR)/%.o,$(basename $(filter-out src/main.c, $(ALL_SRCS))))
 # dependency files, auto generated from source files
@@ -31,7 +31,7 @@ TAR := tar
 
 CFLAGS 	:= -std=c11 -D_GNU_SOURCE -Iinc/
 LDFLAGS := -ldl -lm
-LDLIBS 	:= -Llibs/
+LDLIBS 	:= -Llib/
 
 # flags required for dependency generation; passed to compilers
 DEPFLAGS = -MT $@ -MD -MP -MF $(DEPDIR)/$*.d

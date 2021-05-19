@@ -39,8 +39,8 @@ void list_free(struct ListHead *h);
 void list_clear(struct ListHead *h);
 bool list_compare(struct ListHead *ah, struct ListHead *bh);
 struct ListNode *list_find(const struct ListHead *h, const char *data);
-struct ListNode *list_insert_head(const struct ListHead *h, const char *data);
-struct ListNode *list_insert_after(struct ListNode *n, const char *data);
-struct ListNode *list_insert_before(struct ListNode *n, const char *data);
+struct ListNode *list_insert_head(struct ListHead *h, char *data);
+struct ListNode *list_insert_after(struct ListNode *n, char *data);
+struct ListNode *list_insert_before(struct ListNode *n, char *data);
 
 #endif /* ifndef MIA_LIST_H */

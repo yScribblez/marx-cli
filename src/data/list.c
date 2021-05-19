@@ -21,8 +21,9 @@
 
 // http://www.manpagez.com/man/3/queue/ (for future reference)
 
+#include <string.h>
 #include "data/list.h"
-#include "memory.h"
+#include "data/memory.h"
 
 /**
  * list_free - free list and clear data
@@ -61,7 +62,7 @@ bool list_compare(struct ListHead *ah, struct ListHead *bh) {
     if (!ah || !bh) return false;
 
     struct ListNode *anp, *bnp;
-    for (anp = LIST_HEAD(ah), bnp = LIST_HEAD(bh); anp != LIST_END(ah) && bnp != LIST_END(bh);
+    for (anp = LIST_FIRST(ah), bnp = LIST_FIRST(bh); anp != LIST_END(ah) && bnp != LIST_END(bh);
             anp = LIST_NEXT(anp, entries), bnp = LIST_NEXT(bnp, entries)) {
         if (strcmp(anp->data, bnp->data)) return false;
     }
@@ -81,34 +82,32 @@ struct ListNode *list_find(const struct ListHead *h, const char *data) {
     return NULL;
 }
 
-struct ListNode *list_insert_head(const struct ListHead *h, const char *data) {
+struct ListNode *list_insert_head(struct ListHead *h, char *data) {
     if (!h) return NULL;
 
-    struct ListNode *np = malloc(sizeof(struct ListNode));
+    struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
     LIST_INSERT_HEAD(h, np, entries);
 
     return np;
 }
 
-struct ListNode *list_insert_after(struct ListNode *n, const char *data) {
+struct ListNode *list_insert_after(struct ListNode *n, char *data) {
     if (!n) return NULL;
 
-    struct ListNode *np = malloc(sizeof(struct ListNode));
+    struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
     LIST_INSERT_AFTER(n, np, entries);
 
     return np;
 }
 
-struct ListNode *list_insert_before(struct ListNode *n, const char *data) {
+struct ListNode *list_insert_before(struct ListNode *n, char *data) {
     if (!n) return NULL;
 
-    struct ListNode *np = malloc(sizeof(struct ListNode));
+    struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
     LIST_INSERT_BEFORE(n, np, entries);
 
     return np;
 }
-
-#endif /* ifndef MIA_LIST_H */

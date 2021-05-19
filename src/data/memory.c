@@ -49,12 +49,12 @@ void *mem_malloc(size_t size) {
  * @param ptr pointer to region to be reallocated
  * @param size pointer size of memory region after reallocation
  */
-void mem_realloc(void *ptr, size_t size) {
-    if (!ptr) return;
+void *mem_realloc(void *ptr, size_t size) {
+    if (!ptr) return NULL;
 
     if (size == 0) {
         free(ptr);
-        return;
+        return NULL;
     }
 
     return realloc(ptr, size);

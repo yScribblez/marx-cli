@@ -1,5 +1,7 @@
 # Prerequisites
-.d/**/*.d
+.d/src/*.d
+.d/src/data/*.d
+.d/test/*.d
 
 # Compiled Object files
 *.slo
