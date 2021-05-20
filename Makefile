@@ -24,12 +24,13 @@ DEPS := $(patsubst %,$(DEPDIR)/%.d,$(basename $(ALL_SRCS)))
 # compilers (at least gcc and clang) don't create the subdirectories automatically
 $(shell mkdir -p $(dir $(OBJS)) >/dev/null)
 $(shell mkdir -p $(dir $(DEPS)) >/dev/null)
+$(shell mkdir -p $(dir $(TEST_OBJS)) >/dev/null)
 
 CC 	:= clang
 LD 	:= clang
 TAR := tar
 
-CFLAGS 	:= -std=c11 -D_GNU_SOURCE -Iinc/
+CFLAGS 	:= -std=c11 -D_GNU_SOURCE -Iinc/ -g -O0
 LDFLAGS := -ldl -lm
 LDLIBS 	:= -Llib/
 
@@ -43,7 +44,7 @@ all: $(MARXCLI)
 
 .PHONY: clean
 clean:
-	$(RM) -r $(OBJDIR) $(DEPDIR) $(MARXCLI)
+	$(RM) -r $(OBJDIR) $(DEPDIR) $(MARXCLI) $(TEST_MARXCLI)
 
 .PHONY: test
 test: $(TEST_MARXCLI)

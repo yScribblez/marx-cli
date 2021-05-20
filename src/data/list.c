@@ -21,6 +21,7 @@
 
 // http://www.manpagez.com/man/3/queue/ (for future reference)
 
+#include <stdio.h>
 #include <string.h>
 #include "data/list.h"
 #include "data/memory.h"
@@ -49,14 +50,24 @@ void list_free(struct ListHead *h) {
 void list_clear(struct ListHead *h) {
     if (!h) return;
 
-    struct ListNode *np, *np_temp;
-    LIST_FOREACH_SAFE(np, h, entries, np_temp) {
-        LIST_REMOVE(np, entries);
-        mem_free(np);
-    }
-
+    struct ListNode *np = LIST_FIRST(h);
+    *(np)->entries.le_prev = (np)->entries.le_next;
+    mem_free(np);
     LIST_INIT(h);
 }
+/*
+LIST_FOREACH_SAFE(np, h, entries, np_temp) {
+    *(np)->entries.le_prev = (np)->entries.le_next;
+    mem_free(np);
+}
+ np = LIST_FIRST(h);
+ while (np != NULL) {
+         np_temp = LIST_NEXT(np, entries);
+         mem_free(np);
+         np = np_temp;
+ }
+*/
+// if (!h) puts("OOPS");
 
 bool list_compare(struct ListHead *ah, struct ListHead *bh) {
     if (!ah || !bh) return false;
