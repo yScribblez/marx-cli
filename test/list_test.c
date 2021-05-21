@@ -38,15 +38,75 @@ struct ListHead test_list_create(const char *items[], bool copy)
   return lh;
 }
 
-void test_example(void) {
-    // static const char *items[] = {"One", "Two", "Three", NULL};
-    static const char *items[] = {"One", NULL};
-    struct ListHead h = test_list_create(items, true);
+void test_clear(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead h = test_list_create(items, false);
     list_clear(&h);
     TEST_CHECK_(1, "list_clear(&h)");
 }
 
+void test_free(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead h = test_list_create(items, true);
+    list_free(&h);
+    TEST_CHECK_(1, "list_free(&h)");
+}
+
+void test_compare(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    static const char *items_diff[] = {"One", "Two", NULL};
+    struct ListHead ah = test_list_create(items, false);
+    struct ListHead bh = test_list_create(items, false);
+    struct ListHead ch = test_list_create(items_diff, false);
+    TEST_CHECK_(list_compare(&ah, &bh) == true, "list_compare(&ah, &bh)");
+    TEST_CHECK_(list_compare(&ah, &ch) == false, "list_compare(&ah, &ch)");
+}
+
+void test_find(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead ah = test_list_create(items, false);
+    TEST_CHECK_(list_find(&ah, "One") != NULL, "list_find(&ah, \"One\")");
+    TEST_CHECK_(list_find(&ah, "Two") != NULL, "list_find(&ah, \"Two\")");
+    TEST_CHECK_(list_find(&ah, "Three") != NULL, "list_find(&ah, \"Three\")");
+    TEST_CHECK_(list_find(&ah, "Four") == NULL, "list_find(&ah, \"Four\")");
+}
+
+void test_insert_head(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead ah = test_list_create(items, false);
+    TEST_CHECK(LIST_FIRST(&ah) == list_find(&ah, "Three"));
+    list_insert_head(&ah, "Four");
+    TEST_CHECK_(1, "list_insert_head(&h, \"Four\")");
+    TEST_CHECK(LIST_FIRST(&ah) == list_find(&ah, "Four"));
+}
+
+void test_insert_after(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead ah = test_list_create(items, false);
+    struct ListNode *two = list_find(&ah, "Two");
+    TEST_CHECK(two->entries.le_next == list_find(&ah, "One"));
+    struct ListNode *four = list_insert_after(two, "Four");
+    TEST_CHECK_(1, "list_insert_after(two, \"Four\")");
+    TEST_CHECK(two->entries.le_next == four);
+}
+
+void test_insert_before(void) {
+    static const char *items[] = {"One", "Two", "Three", NULL};
+    struct ListHead ah = test_list_create(items, false);
+    struct ListNode *two = list_find(&ah, "Two");
+    TEST_CHECK(two->entries.le_next == list_find(&ah, "One"));
+    struct ListNode *four = list_insert_before(two, "Four");
+    TEST_CHECK_(1, "list_insert_before(two, \"Four\")");
+    TEST_CHECK(four->entries.le_next == two);
+}
+
 TEST_LIST = {
-    { "example", test_example },
+    { "test_clear", test_clear },
+    { "test_free", test_free },
+    { "test_compare", test_compare },
+    { "test_find", test_find },
+    { "test_insert_head", test_insert_head },
+    { "test_insert_after", test_insert_after },
+    { "test_insert_before", test_insert_before },
     { NULL, NULL }
 };

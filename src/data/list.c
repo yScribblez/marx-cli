@@ -50,25 +50,20 @@ void list_free(struct ListHead *h) {
 void list_clear(struct ListHead *h) {
     if (!h) return;
 
-    struct ListNode *np = LIST_FIRST(h);
-    *(np)->entries.le_prev = (np)->entries.le_next;
-    mem_free(np);
+    struct ListNode *np, *np_temp;
+    LIST_FOREACH_SAFE(np, h, entries, np_temp) {
+        LIST_REMOVE(np, entries);
+        mem_free(np);
+    }
+
     LIST_INIT(h);
 }
-/*
-LIST_FOREACH_SAFE(np, h, entries, np_temp) {
-    *(np)->entries.le_prev = (np)->entries.le_next;
-    mem_free(np);
-}
- np = LIST_FIRST(h);
- while (np != NULL) {
-         np_temp = LIST_NEXT(np, entries);
-         mem_free(np);
-         np = np_temp;
- }
-*/
-// if (!h) puts("OOPS");
 
+/**
+ * list_compare - compares two lists
+ * @param ah head of first list
+ * @param bh head of second list
+ */
 bool list_compare(struct ListHead *ah, struct ListHead *bh) {
     if (!ah || !bh) return false;
 
@@ -82,6 +77,11 @@ bool list_compare(struct ListHead *ah, struct ListHead *bh) {
     return true;
 }
 
+/**
+ * list_find - find an element in the list
+ * @param h head of list
+ * @param data element to search for
+ */
 struct ListNode *list_find(const struct ListHead *h, const char *data) {
     if (!h) return NULL;
 
@@ -93,6 +93,11 @@ struct ListNode *list_find(const struct ListHead *h, const char *data) {
     return NULL;
 }
 
+/**
+ * list_insert_head - insert an element at the front of the list
+ * @param h head of list
+ * @param data element to insert
+ */
 struct ListNode *list_insert_head(struct ListHead *h, char *data) {
     if (!h) return NULL;
 
@@ -103,6 +108,11 @@ struct ListNode *list_insert_head(struct ListHead *h, char *data) {
     return np;
 }
 
+/**
+ * list_insert_after - insert an element after a given node
+ * @param n node
+ * @param data element to insert
+ */
 struct ListNode *list_insert_after(struct ListNode *n, char *data) {
     if (!n) return NULL;
 
@@ -113,6 +123,11 @@ struct ListNode *list_insert_after(struct ListNode *n, char *data) {
     return np;
 }
 
+/**
+ * list_insert_before - insert an element before a given node
+ * @param n node
+ * @param data element to insert
+ */
 struct ListNode *list_insert_before(struct ListNode *n, char *data) {
     if (!n) return NULL;
 
