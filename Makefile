@@ -30,7 +30,7 @@ CC 	:= clang
 LD 	:= clang
 TAR := tar
 
-CFLAGS 	:= -std=c11 -D_GNU_SOURCE -Iinc/ -g -O0
+CFLAGS 	:= -std=c11 -D_GNU_SOURCE -Isrc/ -g -O0
 LDFLAGS := -ldl -lm
 LDLIBS 	:= -Llib/
 
