@@ -5,6 +5,7 @@ TEST_MARXCLI := test-marx-cli
 # source files
 SRCS := $(wildcard src/*.c src/data/*.c)
 # test source files
+# TEST_SRCS := $(filter-out test/unity.c, $(wildcard test/*.c))
 TEST_SRCS := $(wildcard test/*.c)
 # all source files for dependency generation
 ALL_SRCS := $(SRCS) $(TEST_SRCS)
@@ -42,12 +43,11 @@ LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) -o $@
 
 all: $(MARXCLI)
 
+test: $(TEST_MARXCLI)
+
 .PHONY: clean
 clean:
 	$(RM) -r $(OBJDIR) $(DEPDIR) $(MARXCLI) $(TEST_MARXCLI)
-
-.PHONY: test
-test: $(TEST_MARXCLI)
 
 .PHONY: help
 help:
