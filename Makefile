@@ -51,6 +51,7 @@ LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) -o $@
 
 all: $(MARXCLI)
 
+.PHONY: test
 test: $(RESULTS)
 	@echo "-----------------------\nPASS:\n-----------------------"
 	@echo `grep -h -s PASS $(PATHR)/**/*.txt`
@@ -82,6 +83,9 @@ $(PATHO)/%.o: %.c $(PATHD)/%.d
 	$(COMPILE.c) $<
 
 .PRECIOUS: $(PATHD)/%.d
+.PRECIOUS: $(PATHO)/%.o
+.PRECIOUS: $(PATHR)/%.txt
+.PRECIOUS: $(PATHE)/%.out
 $(PATHD)/%.d: ;
 
 -include $(ALL_DEPS)
