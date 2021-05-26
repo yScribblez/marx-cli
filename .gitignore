@@ -33,5 +33,8 @@
 *.out
 *.app
 
+# Build dir
+build/
+
 marx-cli
 test-marx-cli
