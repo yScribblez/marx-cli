@@ -52,6 +52,13 @@ LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) -o $@
 all: $(MARXCLI)
 
 test: $(RESULTS)
+	@echo "-----------------------\nPASS:\n-----------------------"
+	@echo `grep -h -s PASS $(PATHR)/**/*.txt`
+	@echo "-----------------------\nIGNORES:\n-----------------------"
+	@echo `grep -h -s IGNORE $(PATHR)/**/*.txt`
+	@echo "-----------------------\nFAILURES:\n-----------------------"
+	@echo `grep -h -s FAIL $(PATHR)/**/*.txt`
+	@echo "\nDONE"
 
 .PHONY: clean
 clean:
