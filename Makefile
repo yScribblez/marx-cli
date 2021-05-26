@@ -63,7 +63,7 @@ test: $(RESULTS)
 
 .PHONY: clean
 clean:
-	$(RM) -r $(PATHB) $(MARXCLI) $(TEST_MARXCLI)
+	$(RM) -r $(PATHB) $(MARXCLI)
 
 .PHONY: help
 help:
