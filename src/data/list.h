@@ -31,16 +31,16 @@
  */
 struct ListNode {
     char *data;
-    LIST_ENTRY(ListNode) entries;
+    TAILQ_ENTRY(ListNode) entries;
 };
-LIST_HEAD(ListHead, ListNode);
+TAILQ_HEAD(ListHead, ListNode);
 
 void list_free(struct ListHead *h);
 void list_clear(struct ListHead *h);
 bool list_compare(struct ListHead *ah, struct ListHead *bh);
 struct ListNode *list_find(const struct ListHead *h, const char *data);
 struct ListNode *list_insert_head(struct ListHead *h, char *data);
-struct ListNode *list_insert_after(struct ListNode *n, char *data);
+struct ListNode *list_insert_after(struct ListHead *h, struct ListNode *n, char *data);
 struct ListNode *list_insert_before(struct ListNode *n, char *data);
 
 #endif /* ifndef MIA_LIST_H */

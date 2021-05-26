@@ -33,14 +33,15 @@
 void list_free(struct ListHead *h) {
     if (!h) return;
 
-    struct ListNode *np, *np_temp;
-    LIST_FOREACH_SAFE(np, h, entries, np_temp) {
-        LIST_REMOVE(np, entries);
-        mem_free(np->data);
-        mem_free(np);
+    struct ListNode *np, *np_temp, *np_del;
+    TAILQ_FOREACH_SAFE(np, h, entries, np_temp) {
+        np_del = np;
+        TAILQ_REMOVE(h, np, entries);
+        mem_free(np_del->data);
+        mem_free(np_del);
     }
 
-    LIST_INIT(h);
+    TAILQ_INIT(h);
 }
 
 /**
@@ -50,13 +51,14 @@ void list_free(struct ListHead *h) {
 void list_clear(struct ListHead *h) {
     if (!h) return;
 
-    struct ListNode *np, *np_temp;
-    LIST_FOREACH_SAFE(np, h, entries, np_temp) {
-        LIST_REMOVE(np, entries);
-        mem_free(np);
+    struct ListNode *np, *np_temp, *np_del;
+    TAILQ_FOREACH_SAFE(np, h, entries, np_temp) {
+        np_del = np;
+        TAILQ_REMOVE(h, np, entries);
+        mem_free(np_del);
     }
 
-    LIST_INIT(h);
+    TAILQ_INIT(h);
 }
 
 /**
@@ -68,11 +70,11 @@ bool list_compare(struct ListHead *ah, struct ListHead *bh) {
     if (!ah || !bh) return false;
 
     struct ListNode *anp, *bnp;
-    for (anp = LIST_FIRST(ah), bnp = LIST_FIRST(bh); anp != LIST_END(ah) && bnp != LIST_END(bh);
-            anp = LIST_NEXT(anp, entries), bnp = LIST_NEXT(bnp, entries)) {
+    for (anp = TAILQ_FIRST(ah), bnp = TAILQ_FIRST(bh); anp != TAILQ_END(ah) && bnp != TAILQ_END(bh);
+            anp = TAILQ_NEXT(anp, entries), bnp = TAILQ_NEXT(bnp, entries)) {
         if (strcmp(anp->data, bnp->data)) return false;
     }
-    if ((anp != LIST_END(ah)) || (bnp != LIST_END(bh))) return false;
+    if ((anp != TAILQ_END(ah)) || (bnp != TAILQ_END(bh))) return false;
 
     return true;
 }
@@ -86,7 +88,7 @@ struct ListNode *list_find(const struct ListHead *h, const char *data) {
     if (!h) return NULL;
 
     struct ListNode *np;
-    LIST_FOREACH(np, h, entries) {
+    TAILQ_FOREACH(np, h, entries) {
         if (strcmp(np->data, data) == 0) return np;
     }
 
@@ -103,7 +105,7 @@ struct ListNode *list_insert_head(struct ListHead *h, char *data) {
 
     struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
-    LIST_INSERT_HEAD(h, np, entries);
+    TAILQ_INSERT_HEAD(h, np, entries);
 
     return np;
 }
@@ -113,12 +115,12 @@ struct ListNode *list_insert_head(struct ListHead *h, char *data) {
  * @param n node
  * @param data element to insert
  */
-struct ListNode *list_insert_after(struct ListNode *n, char *data) {
+struct ListNode *list_insert_after(struct ListHead *h, struct ListNode *n, char *data) {
     if (!n) return NULL;
 
     struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
-    LIST_INSERT_AFTER(n, np, entries);
+    TAILQ_INSERT_AFTER(h, n, np, entries);
 
     return np;
 }
@@ -133,7 +135,7 @@ struct ListNode *list_insert_before(struct ListNode *n, char *data) {
 
     struct ListNode *np = mem_malloc(sizeof(struct ListNode));
     np->data = data;
-    LIST_INSERT_BEFORE(n, np, entries);
+    TAILQ_INSERT_BEFORE(n, np, entries);
 
     return np;
 }

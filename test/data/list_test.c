@@ -29,13 +29,13 @@ void tearDown(void) {}
 
 struct ListHead test_list_create(const char *items[], bool copy)
 {
-  struct ListHead lh = LIST_HEAD_INITIALIZER(lh);
+  struct ListHead lh = TAILQ_HEAD_INITIALIZER(lh);
 
   for (size_t i = 0; items[i]; i++) {
     struct ListNode *np = mem_calloc(1, sizeof(struct ListNode));
     if (copy) np->data = strdup(items[i]);
     else np->data = (char *) items[i];
-    LIST_INSERT_HEAD(&lh, np, entries);
+    TAILQ_INSERT_TAIL(&lh, np, entries);
   }
 
   return lh;
@@ -77,30 +77,30 @@ void test_find(void) {
 void test_insert_head(void) {
     static const char *items[] = {"One", "Two", "Three", NULL};
     struct ListHead ah = test_list_create(items, false);
-    TEST_ASSERT(LIST_FIRST(&ah) == list_find(&ah, "Three"));
-    list_insert_head(&ah, "Four");
+    TEST_ASSERT(TAILQ_FIRST(&ah) == list_find(&ah, "One"));
+    list_insert_head(&ah, "Zero");
     TEST_ASSERT(1);
-    TEST_ASSERT(LIST_FIRST(&ah) == list_find(&ah, "Four"));
+    TEST_ASSERT(TAILQ_FIRST(&ah) == list_find(&ah, "Zero"));
 }
 
 void test_insert_after(void) {
     static const char *items[] = {"One", "Two", "Three", NULL};
     struct ListHead ah = test_list_create(items, false);
     struct ListNode *two = list_find(&ah, "Two");
-    TEST_ASSERT(two->entries.le_next == list_find(&ah, "One"));
-    struct ListNode *four = list_insert_after(two, "Four");
+    TEST_ASSERT(two->entries.tqe_next == list_find(&ah, "Three"));
+    struct ListNode *four = list_insert_after(&ah, two, "Four");
     TEST_ASSERT(1);
-    TEST_ASSERT(two->entries.le_next == four);
+    TEST_ASSERT(two->entries.tqe_next == four);
 }
 
 void test_insert_before(void) {
     static const char *items[] = {"One", "Two", "Three", NULL};
     struct ListHead ah = test_list_create(items, false);
     struct ListNode *two = list_find(&ah, "Two");
-    TEST_ASSERT(two->entries.le_next == list_find(&ah, "One"));
+    TEST_ASSERT(two->entries.tqe_next == list_find(&ah, "Three"));
     struct ListNode *four = list_insert_before(two, "Four");
     TEST_ASSERT(1);
-    TEST_ASSERT(four->entries.le_next == two);
+    TEST_ASSERT(four->entries.tqe_next == two);
 }
 
 
