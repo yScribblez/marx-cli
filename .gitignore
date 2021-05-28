@@ -38,3 +38,6 @@ build/
 
 marx-cli
 test-marx-cli
+
+# Extras
+tags
