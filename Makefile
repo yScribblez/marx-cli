@@ -78,13 +78,17 @@ DEPFLAGS = -MT $@ -MD -MP -MF
 COMPILE.c = $(CC) $(DEPFLAGS)/$*.d $(CFLAGS) -c -o $@
 LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) -o $@
 
-all: release_build $(MARXCLI)
+all: release
+
+.PHONY: release
+release: release_build $(MARXCLI)
 release_build: 
 	$(eval DEPFLAGS += $(RPATHD))
 
+.PHONY: debug
 debug: debug_build $(MARXCLI_DEBUG)
 debug_build: 
-	$(eval DEPFLAGS += $(RPATHD))
+	$(eval DEPFLAGS += $(DPATHD))
 	$(eval CFLAGS += -g)
 
 .PHONY: test
@@ -125,6 +129,9 @@ $(DPATHO)/%.o: %.c
 $(DPATHO)/%.o: %.c $(DPATHD)/%.d
 	$(COMPILE.c) $<
 
+$(RPATHD)/%.d: ;
+$(DPATHD)/%.d: ;
+
 .PRECIOUS: $(RPATHD)/%.d
 .PRECIOUS: $(RPATHO)/%.o
 .PRECIOUS: $(RPATHR)/%.txt
@@ -133,7 +140,5 @@ $(DPATHO)/%.o: %.c $(DPATHD)/%.d
 .PRECIOUS: $(DPATHO)/%.o
 .PRECIOUS: $(DPATHR)/%.txt
 .PRECIOUS: $(DPATHE)/%_test.out
-$(RPATHD)/%.d: ;
-$(DPATHD)/%.d: ;
 
 -include $(ALL_DEPS) $(DEBUG_ALL_DEPS)
